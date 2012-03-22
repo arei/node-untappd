@@ -27,36 +27,37 @@ To use Example.js...
  1. Set your API KEY on line 13.
  2. Set your USERNAME on line 16.
  3. Set your PASSWORD on line 25. **Make sure to read the comments and the section below about authentication first!**
- 4. Run the example:
 
-    'node Example.js'
+To run the example:
+
+	node Example.js
 
 ## Basic Usage
 
 There are three parts to using node-untappd:
 
- 1. Import the library:
+Import the library:
  
-	'var UntappdClient = require("UntappdClient.js");'
+	var UntappdClient = require("UntappdClient.js");
  
- 2. Creating the client:
+Creating the client:
  
-	'var apikey = "[ your api key goes here ]";
+	var apikey = "[ your api key goes here ]";
 	var username = null; // replace with a valid username if you want an authenticated usage.
 	var password = null; // replace with a valid hex encode, MD5 password if you want an authenticated usage.
 	var debug = false;
-	var untappd = new UntappdClient(apikey,username,password,debug);'
+	var untappd = new UntappdClient(apikey,username,password,debug);
  		
- 3. Executing API calls, for example:
+Executing API calls, for example:
  
- 	'untappd.userFeed(function(err,obj){
+	untappd.userFeed(function(err,obj){
 		var beers = obj.results.forEach(function(checkin){
 			console.log("\n"+username,"drank",checkin.beer_name);
 			console.log("by",checkin.brewery_name);
 			if (checkin.venue_name) console.log("at",checkin.venue_name);
 			console.log("on",checkin.created_at);
 		});
-	},lookupuser);'
+	},lookupuser);
 
 ## About Authentication
 
