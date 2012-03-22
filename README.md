@@ -28,9 +28,9 @@ To use Example.js...
  2. Set your USERNAME on line 16.
  3. Set your PASSWORD on line 25. **Make sure to read the comments and the section below about authentication first!**
  4. Run the example:
-
+'
     node Example.js
-
+'
 ## Basic Usage
 
 There are three parts to using node-untappd:
