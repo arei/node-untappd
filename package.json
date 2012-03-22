@@ -5,6 +5,15 @@
   "description": "NodeJS API to the Untappd Service",
   "version": "0.1.0",
   "homepage": "http://github.com/arei/node-untappd",
+  "bugs": {
+        "url": "http://github.com/arei/node-untappd/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/arei/node-untappd/blob/master/LICENSE.txt"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/arei/node-untappd.git"
