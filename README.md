@@ -29,7 +29,7 @@ To use Example.js...
  3. Set your PASSWORD on line 25. **Make sure to read the comments and the section below about authentication first!**
  4. Run the example:
 
-	node Example.js
+    node Example.js
 
 ## Basic Usage
 
