@@ -15,7 +15,7 @@ This library nor the authors have any formal relationship with Untappd other tha
  3. You need to get yourself an Untappd API Key.  To do so, go complete the [Untappd API Key Form](http://untappd.com/api/register?register=new).
  4. Have more nice craft beer, make more checkins.
  5. Wait for Untappd to email you your key.  This takes around two (2) business days.
- 6. Download node-untappd.
+ 6. Download node-untappd: `npm node-untappd`
  7. Look at the Example, beer is optional but encouraged.
 
 ## The Example code
