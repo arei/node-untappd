@@ -10,11 +10,11 @@ This library nor the authors have any formal relationship with Untappd other tha
 
 ## Getting Started
 
- 1. If you have never done so, sign up for Untappd and download it to your favorite mobile device.
+ 1. If you have never done so, sign up for [Untappd](http://untappd.com) and download it to your favorite mobile device.
  2. Have a nice craft beer and make sure to Checkin.
- 3. You need to get yourself an Untappd API Key.  To do so, go complete the Untappd API Key Form.
+ 3. You need to get yourself an Untappd API Key.  To do so, go complete the [Untappd API Key Form](http://untappd.com/api/register?register=new).
  4. Have more nice craft beer, make more checkins.
- 5. Wait for an answer.  This takes around two (2) business days.
+ 5. Wait for Untappd to email you your key.  This takes around two (2) business days.
  6. Download node-untappd.
  7. Look at the Example, beer is optional but encouraged.
 
@@ -26,10 +26,10 @@ To use Example.js...
 
  1. Set your API KEY on line 13.
  2. Set your USERNAME on line 16.
- 3. Set your PASSWORD on line 25. ** Make sure to read the comments and the section below about authentication first!**
+ 3. Set your PASSWORD on line 25. **Make sure to read the comments and the section below about authentication first!**
  4. Run the example:
- 
- 	node Example.js
+
+	node Example.js
 
 ## Basic Usage
 
@@ -37,11 +37,11 @@ There are three parts to using node-untappd:
 
  1. Import the library:
  
- 	var UntappdClient = require("UntappdClient.js");
+	var UntappdClient = require("UntappdClient.js");
  
  2. Creating the client:
  
- 	var apikey = "[ your api key goes here ]";
+	var apikey = "[ your api key goes here ]";
 	var username = null; // replace with a valid username if you want an authenticated usage.
 	var password = null; // replace with a valid hex encode, MD5 password if you want an authenticated usage.
 	var debug = false;
