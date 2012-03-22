@@ -1,0 +1,19 @@
+{
+  "author": "Glen R. Goodwin (http://www.arei.net)",
+  "name": "node-untappd",
+  "keywords": [ "untappd","api","beer","node-untappd","untapped" ],
+  "description": "NodeJS API to the Untappd Service",
+  "version": "0.1.0",
+  "homepage": "http://github.com/arei/node-untappd",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/arei/node-untappd.git"
+  },
+  "main": "UntappdClient.js",
+  "engines": {
+    "node": ">=0.6.11"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {}
+}
