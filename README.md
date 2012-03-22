@@ -38,7 +38,7 @@ There are three parts to using node-untappd:
 
 Import the library:
  
-	var UntappdClient = require("UntappdClient.js");
+	var UntappdClient = require("node-untappd");
  
 Creating the client:
  
