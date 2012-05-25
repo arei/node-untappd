@@ -89,3 +89,11 @@ The `obj` will be populated with the object returned from Untappd upon completio
 ## Going beyond the API
 
 We are providing only the most basic API.  Please use it and take it to strange and wonderful new places.  Also, please share what you have done with us, any suggestions you have with us, and by all means any bugs you find with us.  We are eager to hear from you and, more importantly, score free beer from you.
+
+## Examples of Usage
+
+Below is a list of sites where you can see node-untappd in production use.  
+
+ * http://www.arei.net - arei's website which shows the last beer he drank in the upper right corner.
+
+If you are using node-untappd somewhere in production, I'd love to share it out.  Please let me know!
