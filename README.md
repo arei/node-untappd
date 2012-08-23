@@ -8,6 +8,10 @@ This library provides NodeJS with an abstraction to the [Untappd API](http://unt
 
 This library nor the authors have any formal relationship with Untappd other than the beer we drink.
 
+## Build Status
+
+[![Build Status](https://secure.travis-ci.org/arei/node-untappd.png)](http://travis-ci.org/arei/node-untappd)
+
 ## Getting Started
 
  1. If you have never done so, sign up for [Untappd](http://untappd.com) and download it to your favorite mobile device.
