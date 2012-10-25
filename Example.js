@@ -8,38 +8,32 @@ var UntappdClient = require("./UntappdClient",false);
 
 // Definitions
 
-// Replace this with your API KEY
-var apikey = "[ your api key goes here ]";
+// Replace this with your CLIENT ID
+var clientId = "[ your api key goes here ]";
 
-// Replace this if you are using authentication with your USERNAME, as a String.
-var username = null;
-
-// Replace this if you are using authentication with your PASSWORD.
-// This MUST be a Hex encoded MD5 Hash.  To encode a password such you can
-// do the following in node: 
-//
-// 		 require("crypto").createHash("md5").update("password").digest("hex");
-//
-// replacing "password" with a string of your password.
-var password = null; 
+// Replace this with your CLIENT SECRET
+var clientSecret = "[ your client secret goes here ]";
 
 // Set to true if you want to see all sort of nasty output on stdout.
-var debug = true;
+var debug = false;
 
 //The user we want to lookup for this example.
 var lookupuser = "arei";
 
 // Create Client
-var untappd = new UntappdClient(apikey,null,null,debug);
+var untappd = new UntappdClient(debug);
+untappd.setClientId(clientId);
+untappd.setClientSecret(clientSecret);
 
 // EXAMPLE - List last 25 recent checkins of the given user
 untappd.userFeed(function(err,obj){
 	if (debug) console.log(err,obj);
-	if (obj && obj.results) {
-		var beers = obj.results.forEach(function(checkin){
-			console.log("\n"+username,"drank",checkin.beer_name);
-			console.log("by",checkin.brewery_name);
-			if (checkin.venue_name) console.log("at",checkin.venue_name);
+	if (obj && obj.response && obj.response.checkins && obj.response.checkins.items) {
+		var beers = obj.response.checkins.items.forEach(function(checkin){
+			//console.log(checkin);
+			console.log("\n"+checkin.user.user_name,"drank",checkin.beer.beer_name);
+			console.log("by",checkin.brewery.brewery_name);
+			if (checkin.venue.venue_name) console.log("at",checkin.venue.venue_name);
 			console.log("on",checkin.created_at);
 		});
 	}

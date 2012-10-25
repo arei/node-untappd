@@ -16,11 +16,17 @@ This library nor the authors have any formal relationship with Untappd other tha
 
  1. If you have never done so, sign up for [Untappd](http://untappd.com) and download it to your favorite mobile device.
  2. Have a nice craft beer and make sure to Checkin.
- 3. You need to get yourself an Untappd API Key.  To do so, go complete the [Untappd API Key Form](http://untappd.com/api/register?register=new).
+ 3. You need to get yourself an Untappd ClientID and ClientSecret.  To do so, go complete the [Untappd API Key Form](http://untappd.com/api/register?register=new).
  4. Have more nice craft beer, make more checkins.
  5. Wait for Untappd to email you your key.  This takes around two (2) business days.
  6. Download node-untappd: `npm install node-untappd`
  7. Look at the Example, beer is optional but encouraged.
+
+## Access Tokens
+
+Untappd now support OAUTH for most operations and specifically for any operation that writes data to untappd.  
+
+To get an Access Token, you can use our hand OAUTH URL call to get the untappd oauth url, and then use that to get the access token.  For moreinformation on getting access token, please refer to [Untappd's API Authnetication page](http://untappd.com/api/docs/v4#authentication).
 
 ## The Example code
 
@@ -28,9 +34,8 @@ The `Example.js` file provides a very simple example for working with UntappdCli
 
 To use Example.js...
 
- 1. Set your API KEY on line 13.
- 2. Set your USERNAME on line 16.
- 3. Set your PASSWORD on line 25. **Make sure to read the comments and the section below about authentication first!**
+ 1. Set your CLIENT ID on line 12.
+ 2. Set your CLIENT SECRET on line 15.
 
 To run the example:
 
@@ -38,7 +43,7 @@ To run the example:
 
 ## Basic Usage
 
-There are three parts to using node-untappd:
+There are four parts to using node-untappd:
 
 Import the library:
  
@@ -46,14 +51,22 @@ Import the library:
  
 Creating the client:
  
-	var apikey = "[ your api key goes here ]";
-	var username = null; // replace with a valid username if you want an authenticated usage.
-	var password = null; // replace with a valid hex encode, MD5 password if you want an authenticated usage.
 	var debug = false;
-	var untappd = new UntappdClient(apikey,username,password,debug);
+	var untappd = new UntappdClient(debug);
+
+Set your credientials
+
+	var clientId = "[ your api key goes here ]"; // Replace this with your CLIENT ID
+	var clientSecret = "[ your client secret goes here ]"; // Replace this with your CLIENT SECRET
+	var accessToken = "[ your access token goes here ]"; // Replace this with an Access Token, Optional
+
+	untappd.setClientId(clientId);
+	untappd.setClientSecret(clientSecret);
+	untappd.setAccessToken(accessToken); // Optional
  		
 Executing API calls, for example:
  
+ 	var lookupuser = "[ some user name ]";
 	untappd.userFeed(function(err,obj){
 		var beers = obj.results.forEach(function(checkin){
 			console.log("\n"+username,"drank",checkin.beer_name);
@@ -62,21 +75,6 @@ Executing API calls, for example:
 			console.log("on",checkin.created_at);
 		});
 	},lookupuser);
-
-## About Authentication
-
-Some of the API calls require an authenticated user, while some do not.  In those cases where it is required, simply supply a username and password when constructing UntappdClient following the API Key as shown here:
-
-	var untappd = new UntappdClient(apikey,username,password,debug);
-
-The username should be a simple String. 
-
-The password should be a hex encode, MD5 hash.  To make a hex encode, MD5 hash do the following:
-
-	node
-	> require("crypto").createHash("md5").update("password").digest("hex");
-
-Replace "password" with the password you want to use.  The outputted string is your MD5 hash which you can then put into your code.
 
 ## API Calls
 
