@@ -308,7 +308,7 @@ var UntappdClient = function(debug) {
 
 	// CHECKIN calls
 
-	that.checkin = function(callback,gmt_offset,timezone,beer_id,foursquare_id,user_lat,user_long,comment,rating,facebook,twitter,foursqaure,gowalla) {
+	that.checkin = function(callback,gmt_offset,timezone,beer_id,foursquare_id,user_lat,user_long,comment,rating,facebook,twitter,foursquare,gowalla) {
 		if (gmt_offset===undefined || gmt_offset===null) throw new Error("gmt_offset cannot be undefined or null.");
 		if (timezone===undefined || timezone===null) throw new Error("timezone cannot be undefined or null.");
 		if (beer_id===undefined || beer_id===null) throw new Error("beer_id cannot be undefined or null.");
