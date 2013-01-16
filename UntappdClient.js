@@ -47,8 +47,7 @@ var UntappdClient = function(debug) {
 	};
 	this.getAccessToken = getAccessToken;
 	
-	var post = function(path,params,data,callback){
-		
+	var post = function(path, params, data, callback){
 		return req("POST",path,params,data,callback);
 	}
 	
@@ -56,8 +55,8 @@ var UntappdClient = function(debug) {
 		return req("GET",path,params,null,callback);
 	}
 
-	var req = function(method, path,params,data, callback) {
-		if (params && params.constructor==="function" && !callback) callback = params,params = {};
+	var req = function(method, path, params, data, callback) {
+		if (params && params.constructor==="function" && !callback) callback = params, params = {};
 		if (!params) params = {};
 
 		var options = {
@@ -67,7 +66,7 @@ var UntappdClient = function(debug) {
 			method: method
 		};
 		
-		if(method == "POST"){
+		if (method == "POST") {
 			data = QS.stringify(data);
 			options.headers = {
 				"Content-Type":"application/x-www-form-urlencoded",
@@ -75,7 +74,7 @@ var UntappdClient = function(debug) {
 			}
 		}
 
-		Object.keys(params).forEach(function(k){
+		Object.keys(params).forEach(function(k) {
 			if (params[k]===undefined || params[k]===null) delete params[k]; 
 		});
 
@@ -359,7 +358,7 @@ var UntappdClient = function(debug) {
 		if (comment===undefined || comment===null) throw new Error("comment cannot be undefined or null.");
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.addComment requires an AccessToken.");
-		return get("/v4/checkin/addcomment/"+checkin_id,{
+		return post("/v4/checkin/addcomment/"+checkin_id,{},{
 			comment: comment.substring(0,140)
 		},callback);	
 	};
@@ -368,7 +367,7 @@ var UntappdClient = function(debug) {
 		if (comment_id===undefined || comment_id===null) throw new Error("comment_id cannot be undefined or null.");
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.removeComment requires an AccessToken.");
-		return get("/v4//checkin/deletecomment"+comment_id,{
+		return post("/v4//checkin/deletecomment"+comment_id,{},{
 		},callback);	
 	};
 
@@ -414,7 +413,7 @@ var UntappdClient = function(debug) {
 		if (target_id===undefined || target_id===null) throw new Error("target_id cannot be undefined or null.");
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.acceptFriends requires an AccessToken.");
-		return get("/v4/friend/accept/"+target_id,{
+		return post("/v4/friend/accept/"+target_id,{},{
 		},callback);	
 	};
 
@@ -422,7 +421,7 @@ var UntappdClient = function(debug) {
 		if (target_id===undefined || target_id===null) throw new Error("target_id cannot be undefined or null.");
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.rejectFriends requires an AccessToken.");
-		return get("/v4/friend/reject/"+target_id,{
+		return post("/v4/friend/reject/"+target_id,{},{
 		},callback);	
 	};
 
