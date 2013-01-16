@@ -46,8 +46,17 @@ var UntappdClient = function(debug) {
 		return token;
 	};
 	this.getAccessToken = getAccessToken;
+	
+	var post = function(path,params,data,callback){
+		
+		return req("POST",path,params,data,callback);
+	}
+	
+	var get = function(path, params, callback){
+		return req("GET",path,params,null,callback);
+	}
 
-	var get = function(path,params,callback) {
+	var req = function(method, path,params,data, callback) {
 		if (params && params.constructor==="function" && !callback) callback = params,params = {};
 		if (!params) params = {};
 
@@ -55,8 +64,16 @@ var UntappdClient = function(debug) {
 			host: 'api.untappd.com',
 			port: 80,
 			path: path,
-			method: "GET"
+			method: method
 		};
+		
+		if(method == "POST"){
+			data = QS.stringify(data);
+			options.headers = {
+				"Content-Type":"application/x-www-form-urlencoded",
+				"Content-Length":data.length
+			}
+		}
 
 		Object.keys(params).forEach(function(k){
 			if (params[k]===undefined || params[k]===null) delete params[k]; 
@@ -69,7 +86,12 @@ var UntappdClient = function(debug) {
 		if (params) options.path += "?"+QS.stringify(params);
 
 		if (debug) console.log("node-untappd: get : "+options.path);
-
+		
+		if(debug){
+			console.log(params);
+			console.log(data);
+		}
+		
 		var request = HTTP.request(options,function(response){
 			response.setEncoding("utf8");
 			var data = "";
@@ -92,6 +114,9 @@ var UntappdClient = function(debug) {
 			if (debug) console.log("node-untappd: error: ",arguments);
 			callback.call(that,arguments,null);
 		});
+		if(method=="POST"){
+			request.write(data);
+		}
 		request.end();
 		return request;		
 	};
@@ -314,7 +339,7 @@ var UntappdClient = function(debug) {
 		if (beer_id===undefined || beer_id===null) throw new Error("beer_id cannot be undefined or null.");
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.checkin requires an AccessToken.");
-		return get("/v4/checkin/add",{
+		return post("/v4/checkin/add",{},{
 			gmt_offset: gmt_offset,
 			timezone: timezone,
 			bid: beer_id,
