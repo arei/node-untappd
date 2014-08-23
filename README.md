@@ -80,7 +80,7 @@ Executing API calls, for example:
 
 All of the API calls defined in the [Untappd API](http://untappd.com/api/docs/v3) have been implemented into the UntappdClient.  It's a long list, so please look at UntappdClient for usage.
 
-Each API call takes a callback function as it's first argument.  Upon an result this function is called with `err` as the first parameter and `obj`, an object of the results, as the second.  
+Each API call takes a callback function as its first argument.  Upon a result this function is called with `err` as the first parameter and `obj`, an object of the results, as the second.  
 
 	function(err,obj)
 	
