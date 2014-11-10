@@ -179,14 +179,14 @@ var UntappdClient = function(debug) {
 		},callback);	
 	};
 
-	that.userFeed = function(callback,lookupUser,limit,offset) {
+	that.userFeed = function(callback,lookupUser,limit,max_id) {
 		if (lookupUser===undefined || lookupUser===null) throw new Error("lookupUser cannot be undefined or null.");
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!(hasToken() || (hasId() && hasSecret()))) throw new Error("UntappdClient.userFeed requires an AccessToken or a ClientId/ClientSecret pair.");
 		return get("/v4/user/checkins/"+lookupUser,{
 			limit: limit,
-			offset: offset
-		},callback);	
+			max_id: max_id
+		},callback);
 	};
 
 	that.pubFeed = function(callback,since,geolat,geolong,radius,limit,offset) {
