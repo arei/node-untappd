@@ -151,7 +151,7 @@ var UntappdClient = function(debug) {
 	that.getUserAuthenticationURL = function(returnRedirectionURL) {
 		if (returnRedirectionURL===undefined || returnRedirectionURL===null) throw new Error("returnRedirectionURL cannot be undefined or null.");
 		if (!hasId() || !hasSecret()) throw new Error("UntappdClient.getUserAuthenticationURL requires a ClientId/ClientSecret pair.");
-		return "http://untappd.com/oauth/authenticate/?client_id="+id+"&response_type=token&redirect_url="+returnRedirectionURL;
+		return "https://untappd.com/oauth/authenticate/?client_id="+id+"&response_type=token&redirect_url="+returnRedirectionURL;
 	};	
 	
 	//this is for server-side, Step 1 - OAUTH Authentication
