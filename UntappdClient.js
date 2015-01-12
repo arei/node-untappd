@@ -1,6 +1,6 @@
 //
 // UntappdClient v4
-// 
+//
 // By Glen R. Goodwin
 // twitter: @areinet
 //
@@ -8,7 +8,7 @@
 var QS = require("querystring");
 var HTTP = require("http");
 var Crypto = require("crypto");
-	
+
 var UntappdClient = function(debug) {
 	var that = this;
 
@@ -24,58 +24,61 @@ var UntappdClient = function(debug) {
 		return id;
 	};
 	this.getClientId = getClientId;
-	
+
 	var setClientSecret = function(clientSecret) {
 		secret = clientSecret;
 		return that;
 	};
 	this.setClientSecret = setClientSecret;
-	
+
 	var getClientSecret = function() {
 		return secret;
 	};
 	this.getClientSecret = getClientSecret;
-	
+
 	var setAccessToken = function(accessToken) {
 		token = accessToken;
 		return that;
 	};
 	this.setAccessToken = setAccessToken;
-	
+
 	var getAccessToken = function() {
 		return token;
 	};
 	this.getAccessToken = getAccessToken;
-	
+
 	var post = function(path, params, data, callback){
 		return req("POST",path,params,data,callback);
-	}
-	
+	};
+
 	var get = function(path, params, callback){
 		return req("GET",path,params,null,callback);
-	}
+	};
 
 	var req = function(method, path, params, data, callback) {
-		if (params && params.constructor==="function" && !callback) callback = params, params = {};
+		if (params && params.constructor==="function" && !callback) {
+			callback = params;
+			params = {};
+		}
 		if (!params) params = {};
 
 		var options = {
 			host: 'api.untappd.com',
-			port: 80,
+			port: 443,
 			path: path,
 			method: method
 		};
-		
+
 		if (method == "POST") {
 			data = QS.stringify(data);
 			options.headers = {
 				"Content-Type":"application/x-www-form-urlencoded",
 				"Content-Length":data.length
-			}
+			};
 		}
 
 		Object.keys(params).forEach(function(k) {
-			if (params[k]===undefined || params[k]===null) delete params[k]; 
+			if (params[k]===undefined || params[k]===null) delete params[k];
 		});
 
 		if (id) params.client_id = id;
@@ -85,20 +88,20 @@ var UntappdClient = function(debug) {
 		if (params) options.path += "?"+QS.stringify(params);
 
 		if (debug) console.log("node-untappd: get : "+options.path);
-		
+
 		if(debug){
 			console.log(params);
 			console.log(data);
 		}
-		
+
 		var request = HTTP.request(options,function(response){
 			response.setEncoding("utf8");
 			var data = "";
 			response.on("data",function(incoming){
 				if (debug) console.log("node-untappd: data: ",incoming.length);
 				data += incoming;
-			})
-			response.on("end",function(incoming){		
+			});
+			response.on("end",function(incoming){
 				if (debug) console.log("node-untappd: end: ",incoming?incoming.length:0);
 				data += incoming?incoming:"";
 				var obj = JSON.parse(data);
@@ -117,7 +120,7 @@ var UntappdClient = function(debug) {
 			request.write(data);
 		}
 		request.end();
-		return request;		
+		return request;
 	};
 
 	var hasToken = function() {
@@ -137,7 +140,7 @@ var UntappdClient = function(debug) {
 	that.verify = function(callback) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		var request = get("/v4",null,function(response){
-			callback.call(that,null,true);	
+			callback.call(that,null,true);
 		});
 		request.on("error",function(err){
 			callback.call(that,err,null);
@@ -152,15 +155,15 @@ var UntappdClient = function(debug) {
 		if (returnRedirectionURL===undefined || returnRedirectionURL===null) throw new Error("returnRedirectionURL cannot be undefined or null.");
 		if (!hasId() || !hasSecret()) throw new Error("UntappdClient.getUserAuthenticationURL requires a ClientId/ClientSecret pair.");
 		return "https://untappd.com/oauth/authenticate/?client_id="+id+"&response_type=token&redirect_url="+returnRedirectionURL;
-	};	
-	
+	};
+
 	//this is for server-side, Step 1 - OAUTH Authentication
 	that.getAuthenticationURL = function(returnRedirectionURL){
 		if (returnRedirectionURL===undefined || returnRedirectionURL===null) throw new Error("returnRedirectionURL cannot be undefined or null.");
 		if (!hasId() || !hasSecret()) throw new Error("UntappdClient.getUserAuthenticationURL requires a ClientId/ClientSecret pair.");
 		return 'https://untappd.com/oauth/authenticate/?client_id='+id+'&client_secret='+secret+'&response_type=code&redirect_url='+returnRedirectionURL+'&code=COD';
 	};
-	
+
 	// Step 2 - OATUH Authorization
 	that.getAuthorizationURL = function(returnRedirectionURL,code){
 		if (returnRedirectionURL===undefined || returnRedirectionURL===null) throw new Error("returnRedirectionURL cannot be undefined or null.");
@@ -176,7 +179,7 @@ var UntappdClient = function(debug) {
 		return get("/v4/checkin/recent",{
 			limit: limit,
 			offset: offset
-		},callback);	
+		},callback);
 	};
 
 	that.userFeed = function(callback,lookupUser,limit,max_id) {
@@ -199,7 +202,7 @@ var UntappdClient = function(debug) {
 			radius: radius,
 			offset: offset,
 			limit: limit
-		},callback);	
+		},callback);
 	};
 
 	that.venueFeed = function(callback,venue_id,since,limit,offset) {
@@ -210,8 +213,8 @@ var UntappdClient = function(debug) {
 			since: since,
 			limit: limit,
 			offset: offset
-		},callback);	
-	};	
+		},callback);
+	};
 
 	that.beerFeed = function(callback,beer_id,since,limit,offset) {
 		if (beer_id===undefined || beer_id===null) throw new Error("beer_id cannot be undefined or null.");
@@ -221,7 +224,7 @@ var UntappdClient = function(debug) {
 			since: since,
 			limit: limit,
 			offset: offset
-		},callback);	
+		},callback);
 	};
 
 	that.breweryFeed = function(callback,brewery_id,since,limit,offset) {
@@ -232,7 +235,7 @@ var UntappdClient = function(debug) {
 			since: since,
 			limit: limit,
 			offset: offset
-		},callback);	
+		},callback);
 	};
 
 	// The INFO
@@ -242,7 +245,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!(hasToken() || (hasId() && hasSecret()))) throw new Error("UntappdClient.checkinInfo requires an AccessToken or a ClientId/ClientSecret pair.");
 		return get("/v4/checkin/view/"+checkin_id,{
-		},callback);	
+		},callback);
 	};
 
 	that.venueInfo = function(callback,venue_id) {
@@ -250,7 +253,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!(hasToken() || (hasId() && hasSecret()))) throw new Error("UntappdClient.venueInfo requires an AccessToken or a ClientId/ClientSecret pair.");
 		return get("/v4/venue/info/"+venue_id,{
-		},callback);	
+		},callback);
 	};
 
 	that.beerInfo = function(callback,beer_id) {
@@ -258,7 +261,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!(hasToken() || (hasId() && hasSecret()))) throw new Error("UntappdClient.beerInfo requires an AccessToken or a ClientId/ClientSecret pair.");
 		return get("/v4/beer/info/"+beer_id,{
-		},callback);	
+		},callback);
 	};
 
 	that.brewerInfo = function(callback,brewery_id) {
@@ -266,7 +269,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!(hasToken() || (hasId() && hasSecret()))) throw new Error("UntappdClient.brewerInfo requires an AccessToken or a ClientId/ClientSecret pair.");
 		return get("/v4/brewery/info/"+brewery_id,{
-		},callback);	
+		},callback);
 	};
 
 	// USER Related Calls
@@ -276,7 +279,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!(hasToken() || (hasId() && hasSecret()))) throw new Error("UntappdClient.userInfo requires an AccessToken or a ClientId/ClientSecret pair.");
 		return get("/v4/user/info/"+lookupUser,{
-		},callback);	
+		},callback);
 	};
 
 	that.userBadges = function(callback,lookupUser,offset) {
@@ -285,7 +288,7 @@ var UntappdClient = function(debug) {
 		if (!(hasToken() || (hasId() && hasSecret()))) throw new Error("UntappdClient.userBadges requires an AccessToken or a ClientId/ClientSecret pair.");
 		return get("/v4/user/badges/"+lookupUser,{
 			offset: offset
-		},callback);	
+		},callback);
 	};
 
 	that.userFriends = function(callback,lookupUser,limit,offset) {
@@ -295,7 +298,7 @@ var UntappdClient = function(debug) {
 		return get("/v4/user/friends/"+lookupUser,{
 			limit: limit,
 			offset: offset
-		},callback);	
+		},callback);
 	};
 
 	that.userWishList = function(callback,lookupUser,offset) {
@@ -304,7 +307,7 @@ var UntappdClient = function(debug) {
 		if (!(hasToken() || (hasId() && hasSecret()))) throw new Error("UntappdClient.userWishList requires an AccessToken or a ClientId/ClientSecret pair.");
 		return get("/v4/user/wishlist/"+lookupUser,{
 			offset: offset
-		},callback);	
+		},callback);
 	};
 
 	that.userDistinctBeers = function(callback,lookupUser,sort,offset) {
@@ -314,7 +317,7 @@ var UntappdClient = function(debug) {
 		return get("/v4/user/beers/"+lookupUser,{
 			sort: sort,
 			offset: offset
-		},callback);	
+		},callback);
 	};
 
 	// SEARCH calls
@@ -364,7 +367,7 @@ var UntappdClient = function(debug) {
 			facebook: facebook?"on":"off",
 			twitter: twitter?"on":"off",
 			foursquare: foursquare?"on":"off"
-		},callback);	
+		},callback);
 	};
 
 	that.addComment = function(callback,checkin_id,comment) {
@@ -374,7 +377,7 @@ var UntappdClient = function(debug) {
 		if (!hasToken()) throw new Error("UntappdClient.addComment requires an AccessToken.");
 		return post("/v4/checkin/addcomment/"+checkin_id,{},{
 			comment: comment.substring(0,140)
-		},callback);	
+		},callback);
 	};
 
 	that.removeComment = function(callback,comment_id) {
@@ -382,7 +385,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.removeComment requires an AccessToken.");
 		return post("/v4//checkin/deletecomment"+comment_id,{},{
-		},callback);	
+		},callback);
 	};
 
 	// If already toasted, this will untoast, otherwise it toasts.
@@ -391,7 +394,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.toast requires an AccessToken.");
 		return get("/v4/checkin/toast"+checkin_id,{
-		},callback);	
+		},callback);
 	};
 
 	// WISH LIST calls
@@ -402,7 +405,7 @@ var UntappdClient = function(debug) {
 		if (!hasToken()) throw new Error("UntappdClient.addToWishList requires an AccessToken.");
 		return get("/v4/user/wishlist/add",{
 			bid: beer_id
-		},callback);	
+		},callback);
 	};
 
 	that.removeFromWishList = function(callback,beer_id) {
@@ -411,7 +414,7 @@ var UntappdClient = function(debug) {
 		if (!hasToken()) throw new Error("UntappdClient.removeFromWishList requires an AccessToken.");
 		return get("/v4/user/wishlist/remove",{
 			bid: beer_id
-		},callback);	
+		},callback);
 	};
 
 	// FRIEND management
@@ -420,7 +423,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.pendingFriends requires an AccessToken.");
 		return get("/v4/user/pending",{
-		},callback);	
+		},callback);
 	};
 
 	that.acceptFriends = function(callback,target_id) {
@@ -428,7 +431,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.acceptFriends requires an AccessToken.");
 		return post("/v4/friend/accept/"+target_id,{},{
-		},callback);	
+		},callback);
 	};
 
 	that.rejectFriends = function(callback,target_id) {
@@ -436,7 +439,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.rejectFriends requires an AccessToken.");
 		return post("/v4/friend/reject/"+target_id,{},{
-		},callback);	
+		},callback);
 	};
 
 	that.removeFriends = function(callback,target_id) {
@@ -444,7 +447,7 @@ var UntappdClient = function(debug) {
 		if (target_id===undefined || target_id===null) throw new Error("target_id cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.removeFriends requires an AccessToken.");
 		return get("/v4/friend/remove/"+target_id,{
-		},callback);	
+		},callback);
 	};
 
 	that.requestFriends = function(callback,target_id) {
@@ -452,7 +455,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.requestFriends requires an AccessToken.");
 		return get("/v4/friend/request/"+target_id,{
-		},callback);	
+		},callback);
 	};
 
 	// NOTIFICATION calls
@@ -461,7 +464,7 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!hasToken()) throw new Error("UntappdClient.notifications requires an AccessToken.");
 		return get("/v4/notifications",{
-		},callback);	
+		},callback);
 	};
 
 	// FOURSQUARE conversion
@@ -471,9 +474,9 @@ var UntappdClient = function(debug) {
 		if (callback===undefined || callback===null) throw new Error("callback cannot be undefined or null.");
 		if (!(hasToken() || (hasId() && hasSecret()))) throw new Error("UntappdClient.foursquareVenueLookup requires and AccessToken or a ClientId/ClientSecret pair.");
 		return get("/v4/venue/foursquare_lookup/"+foursquare_id,{
-		},callback);	
+		},callback);
 	};
-		
+
 };
 
 module.exports = UntappdClient;

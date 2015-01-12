@@ -24,9 +24,9 @@ This library nor the authors have any formal relationship with Untappd other tha
 
 ## Access Tokens
 
-Untappd now support OAUTH for most operations and specifically for any operation that writes data to untappd.  
+Untappd now support OAUTH for most operations and specifically for any operation that writes data to untappd.
 
-To get an Access Token, you can use our hand OAUTH URL call to get the untappd oauth url, and then use that to get the access token.  For moreinformation on getting access token, please refer to [Untappd's API Authnetication page](http://untappd.com/api/docs/v4#authentication).
+To get an Access Token, you can use our handy OAUTH URL call to get the untappd oauth url, and then use that to get the access token.  For more information on getting access tokens, please refer to [Untappd's API Authnetication page](http://untappd.com/api/docs/v4#authentication).
 
 ## The Example code
 
@@ -46,11 +46,11 @@ To run the example:
 There are four parts to using node-untappd:
 
 Import the library:
- 
+
 	var UntappdClient = require("node-untappd");
- 
+
 Creating the client:
- 
+
 	var debug = false;
 	var untappd = new UntappdClient(debug);
 
@@ -63,9 +63,9 @@ Set your credientials
 	untappd.setClientId(clientId);
 	untappd.setClientSecret(clientSecret);
 	untappd.setAccessToken(accessToken); // Optional
- 		
+
 Executing API calls, for example:
- 
+
  	var lookupuser = "[ some user name ]";
 	untappd.userFeed(function(err,obj){
 		var beers = obj.results.forEach(function(checkin){
@@ -80,10 +80,10 @@ Executing API calls, for example:
 
 All of the API calls defined in the [Untappd API](http://untappd.com/api/docs/v3) have been implemented into the UntappdClient.  It's a long list, so please look at UntappdClient for usage.
 
-Each API call takes a callback function as its first argument.  Upon a result this function is called with `err` as the first parameter and `obj`, an object of the results, as the second.  
+Each API call takes a callback function as its first argument.  Upon a result this function is called with `err` as the first parameter and `obj`, an object of the results, as the second.
 
 	function(err,obj)
-	
+
 The `err` is only populated if an error occurs, otherwise it is null.
 
 The `obj` will be populated with the object returned from Untappd upon completion of the call.  In some cases where an error occurs, both `err` and `obj` will be populated.
@@ -94,7 +94,7 @@ We are providing only the most basic API.  Please use it and take it to strange 
 
 ## Examples of Usage
 
-Below is a list of sites where you can see node-untappd in production use.  
+Below is a list of sites where you can see node-untappd in production use.
 
  * http://www.arei.net - arei's website which shows the last beer he drank in the upper right corner.
 
