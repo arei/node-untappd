@@ -6,12 +6,13 @@
 // twitter: @areinet
 
 // Imports
-var UntappdClient = require("./UntappdClient",false);
+var UntappdClient = require("./UntappdClient");
 
 // Definitions
 var clientId = "[ your client id goes here ]";
 var clientSecret = "[ your client secret goes here ]";
 var accessToken = "[ your access token goes here ]";
+
 var debug = false;
 
 var sampleUser = "arei";
@@ -27,6 +28,7 @@ var goodbad = function(name) {
 		if (debug) console.log(name,err,obj);
 		if (err || !obj || obj.code>=400) {
 			console.log("[ FAIL ] "+name);
+			console.error(err);
 			return;
 		}
 		console.log("[ PASS ] "+name);
@@ -37,6 +39,7 @@ var goodbadResults = function(name) {
 		if (debug) console.log(name,err,obj);
 		if (err || !obj || obj.code>=400 || !obj.response) {
 			console.log("[ FAIL ] "+name);
+			console.error(err);
 			return;
 		}
 		console.log("[ PASS ] "+name);
@@ -52,13 +55,12 @@ untappd.setClientId(clientId);
 untappd.setClientSecret(clientSecret);
 untappd.setAccessToken(accessToken);
 
-// Test Connection
-untappd.verify(goodbad("Verify"));
-console.log("");
-
 // get the url for getting an oauth token
 console.log("[ INFO ] OAUTH Url: "+untappd.getUserAuthenticationURL("http://localhost"));
 console.log("");
+
+// Test Connection
+untappd.verify(goodbad("Verify"));
 
 // Test userFeed
 untappd.userFeed(goodbadResults("userFeed"),sampleUser);

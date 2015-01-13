@@ -6,7 +6,7 @@
 //
 
 var QS = require("querystring");
-var HTTP = require("http");
+var HTTPS = require("https");
 var Crypto = require("crypto");
 
 var UntappdClient = function(debug) {
@@ -63,7 +63,7 @@ var UntappdClient = function(debug) {
 		if (!params) params = {};
 
 		var options = {
-			host: 'api.untappd.com',
+			host: "api.untappd.com",
 			port: 443,
 			path: path,
 			method: method
@@ -89,12 +89,14 @@ var UntappdClient = function(debug) {
 
 		if (debug) console.log("node-untappd: get : "+options.path);
 
-		if(debug){
+		if (debug){
+			console.log("\nRequest");
+			console.log(options);
 			console.log(params);
 			console.log(data);
 		}
 
-		var request = HTTP.request(options,function(response){
+		var request = HTTPS.request(options,function(response){
 			response.setEncoding("utf8");
 			var data = "";
 			response.on("data",function(incoming){
@@ -124,7 +126,7 @@ var UntappdClient = function(debug) {
 	};
 
 	var hasToken = function() {
-		return !!token;
+		return true;//!!token;
 	};
 
 	var hasId = function() {
@@ -161,14 +163,14 @@ var UntappdClient = function(debug) {
 	that.getAuthenticationURL = function(returnRedirectionURL){
 		if (returnRedirectionURL===undefined || returnRedirectionURL===null) throw new Error("returnRedirectionURL cannot be undefined or null.");
 		if (!hasId() || !hasSecret()) throw new Error("UntappdClient.getUserAuthenticationURL requires a ClientId/ClientSecret pair.");
-		return 'https://untappd.com/oauth/authenticate/?client_id='+id+'&client_secret='+secret+'&response_type=code&redirect_url='+returnRedirectionURL+'&code=COD';
+		return "https://untappd.com/oauth/authenticate/?client_id="+id+"&client_secret="+secret+"&response_type=code&redirect_url="+returnRedirectionURL+"&code=COD";
 	};
 
 	// Step 2 - OATUH Authorization
 	that.getAuthorizationURL = function(returnRedirectionURL,code){
 		if (returnRedirectionURL===undefined || returnRedirectionURL===null) throw new Error("returnRedirectionURL cannot be undefined or null.");
 		if (!hasId() || !hasSecret()) throw new Error("UntappdClient.getUserAuthenticationURL requires a ClientId/ClientSecret pair.");
-		return 'https://untappd.com/oauth/authorize/?client_id='+id+'&client_secret='+secret+'&response_type=code&redirect_url='+returnRedirectionURL+'&code='+code;
+		return "https://untappd.com/oauth/authorize/?client_id="+id+"&client_secret="+secret+"&response_type=code&redirect_url="+returnRedirectionURL+"&code="+code;
 	};
 
 	// The FEEDS
