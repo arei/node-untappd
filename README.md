@@ -26,7 +26,7 @@ This library nor the authors have any formal relationship with Untappd other tha
 
 Untappd now support OAUTH for most operations and specifically for any operation that writes data to untappd.
 
-To get an Access Token, you can use our handy OAUTH URL call to get the untappd oauth url, and then use that to get the access token.  For more information on getting access tokens, please refer to [Untappd's API Authnetication page](http://untappd.com/api/docs/v4#authentication).
+To get an Access Token, you can use our handy OAUTH URL call to get the untappd oauth url, and then use that to get the access token.  For more information on getting access tokens, please refer to [Untappd's API Authentication page](http://untappd.com/api/docs/v4#authentication).
 
 ## The Example code
 
