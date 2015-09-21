@@ -81,10 +81,12 @@ var UntappdClient = function(debug) {
 			if (params[k]===undefined || params[k]===null) delete params[k];
 		});
 
-		if (id) params.client_id = id;
-		if (secret) params.client_secret = secret;
-		if (token) params.access_token = token;
-
+		if (token) {
+			params.access_token = token;
+		} else {
+			if (id) params.client_id = id;
+			if (secret) params.client_secret = secret;
+		}
 		if (params) options.path += "?"+QS.stringify(params);
 
 		if (debug) console.log("node-untappd: get : "+options.path);
@@ -137,17 +139,18 @@ var UntappdClient = function(debug) {
 		return !!secret;
 	};
 
-	// Verify that a connection works
+	function validate(param, key) {
+		var message = key + " cannot be undefined or null.";
+		return (param) ? null : new Error(message);
+	}
 
-	that.verify = function(callback) {
-		validate(callback, "callback cannot be undefined or null.");
-		var request = get("/v4",null,function(response){
-			callback.call(that,null,true);
-		});
-		request.on("error",function(err){
-			callback.call(that,err,null);
-		});
-	};
+	function authorized(tokenOnly) {
+		tokenOnly = (tokenOnly === undefined) ? false : tokenOnly;
+		var caller = arguments.callee.caller.name;
+
+		if (tokenOnly && !hasToken()) throw new Error("UntappdClient." + caller + " requires an AccessToken.");
+		if (!hasToken() || !(hasId() && hasSecret())) throw new Error("UntappdClient." + caller + " requires an AccessToken or a ClientId/ClientSecret pair.");
+	}
 
 	// OAUTH Stuff
 
@@ -281,10 +284,10 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#beerinfo
 	that.beerInfo = function(callback, data) {
-		validate(data.BEER_ID, "BEER_ID");
+		validate(data.BID, "BID");
 		validate(callback, "callback");
 		authorized();
-		return get("/v4/beer/info/" + data.BEER_ID, data, callback);
+		return get("/v4/beer/info/" + data.BID, data, callback);
 	};
 
 	// https://untappd.com/api/docs#venueinfo
@@ -309,13 +312,6 @@ var UntappdClient = function(debug) {
 		validate(callback, "callback");
 		authorized();
 		return get("/v4/search/brewery", data, callback);
-	};
-
-	this.trending = function(callback) {
-		validate(callback, "callback");
-		authorized();
-		return get("/v4/beer/trending",{
-		},callback);
 	};
 
 	// CHECKIN calls
@@ -417,19 +413,6 @@ var UntappdClient = function(debug) {
 		authorized();
 		return get("/v4/venue/foursquare_lookup/" + data.VENUE_ID, data, callback);
 	};
-
-	function validate(param, key) {
-		var message = key + " cannot be undefined or null.";
-		return (param) ? null : new Error(message);
-	}
-
-	function authorized(tokenOnly) {
-		tokenOnly = (tokenOnly === undefined) ? false : tokenOnly;
-		var caller = arguments.callee.caller.name;
-
-		if (tokenOnly && !hasToken()) throw new Error("UntappdClient." + caller + " requires an AccessToken.");
-		if (!hasToken() || !(hasId() && hasSecret())) throw new Error("UntappdClient." + caller + " requires an AccessToken or a ClientId/ClientSecret pair.");
-	}
 };
 
 module.exports = UntappdClient;
