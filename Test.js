@@ -9,9 +9,9 @@
 var UntappdClient = require("./UntappdClient");
 
 // Definitions
-var clientId = process.env['UNTAPPD_CLIENT_ID'];
-var clientSecret = process.env['UNTAPPD_CLIENT_SECRET'];
-var accessToken = process.env['UNTAPPD_ACCESS_TOKEN'];
+var clientId = process.env['UNTAPPD_CLIENT_ID'] || '';
+var clientSecret = process.env['UNTAPPD_CLIENT_SECRET'] || '';
+var accessToken = process.env['UNTAPPD_ACCESS_TOKEN'] || '';
 
 var debug = true;
 

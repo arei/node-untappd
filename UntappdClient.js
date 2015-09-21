@@ -145,11 +145,15 @@ var UntappdClient = function(debug) {
 	}
 
 	function authorized(tokenOnly) {
+		if (debug) {
+			console.log(getClientId(), getClientSecret(), getAccessToken());
+		}
+
 		tokenOnly = (tokenOnly === undefined) ? false : tokenOnly;
 		var caller = arguments.callee.caller.name;
 
 		if (tokenOnly && !hasToken()) throw new Error("UntappdClient." + caller + " requires an AccessToken.");
-		if (!hasToken() || !(hasId() && hasSecret())) throw new Error("UntappdClient." + caller + " requires an AccessToken or a ClientId/ClientSecret pair.");
+		if (!hasToken() && !(hasId() && hasSecret())) throw new Error("UntappdClient." + caller + " requires an AccessToken or a ClientId/ClientSecret pair.");
 	}
 
 	// OAUTH Stuff
