@@ -13,7 +13,7 @@ var clientId = process.env['UNTAPPD_CLIENT_ID'] || '';
 var clientSecret = process.env['UNTAPPD_CLIENT_SECRET'] || '';
 var accessToken = process.env['UNTAPPD_ACCESS_TOKEN'] || '';
 
-var debug = true;
+var debug = false;
 
 var sampleUser = "arei";
 var beer_id = "1";
@@ -47,9 +47,6 @@ untappd.setAccessToken(accessToken);
 // get the url for getting an oauth token
 console.log("[ INFO ] OAUTH Url: "+untappd.getUserAuthenticationURL("http://localhost:3000/auth"));
 console.log("");
-
-// Test activityFeed
-untappd.activityFeed(goodbadResults("activityFeed"))
 
 // Test userActivityFeed
 untappd.userActivityFeed(goodbadResults("userActivityFeed"),{USERNAME:sampleUser});
