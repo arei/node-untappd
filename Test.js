@@ -9,9 +9,9 @@
 var UntappdClient = require("./UntappdClient");
 
 // Definitions
-var clientId = "[ your client id goes here ]";
-var clientSecret = "[ your client secret goes here ]";
-var accessToken = "[ your access token goes here ]";
+var clientId = process.env['UNTAPPD_CLIENT_ID'] || '';
+var clientSecret = process.env['UNTAPPD_CLIENT_SECRET'] || '';
+var accessToken = process.env['UNTAPPD_ACCESS_TOKEN'] || '';
 
 var debug = false;
 
@@ -23,23 +23,12 @@ var venue_id = "1";
 var foursquare_id = "4ccf5fec1ac7a1cd6a5c1392";
 
 // Handles testing our results
-var goodbad = function(name) {
-	return function(err,obj){
-		if (debug) console.log(name,err,obj);
-		if (err || !obj || obj.code>=400) {
-			console.log("[ FAIL ] "+name);
-			console.error(err);
-			return;
-		}
-		console.log("[ PASS ] "+name);
-	};
-};
 var goodbadResults = function(name) {
 	return function(err,obj){
 		if (debug) console.log(name,err,obj);
-		if (err || !obj || obj.code>=400 || !obj.response) {
-			console.log("[ FAIL ] "+name);
-			console.error(err);
+		if (err || !obj || obj.meta.code>=400 || !obj.response) {
+			console.log("[ FAIL ] " + name);
+			console.error("\t" + obj.meta.error_detail);
 			return;
 		}
 		console.log("[ PASS ] "+name);
@@ -56,74 +45,53 @@ untappd.setClientSecret(clientSecret);
 untappd.setAccessToken(accessToken);
 
 // get the url for getting an oauth token
-console.log("[ INFO ] OAUTH Url: "+untappd.getUserAuthenticationURL("http://localhost"));
+console.log("[ INFO ] OAUTH Url: "+untappd.getUserAuthenticationURL("http://localhost:3000/auth"));
 console.log("");
 
-// Test Connection
-untappd.verify(goodbad("Verify"));
-
-// Test userFeed
-untappd.userFeed(goodbadResults("userFeed"),sampleUser);
+// Test userActivityFeed
+untappd.userActivityFeed(goodbadResults("userActivityFeed"),{USERNAME:sampleUser});
 
 // Test pubFeed
-untappd.pubFeed(goodbadResults("pubFeed"));
+untappd.pubFeed(goodbadResults("pubFeed"), {lat:40, lng:74});
 
-// Test venueFeed
-untappd.venueFeed(goodbadResults("venueFeed"),venue_id);
+// Test venueActivityFeed
+untappd.venueActivityFeed(goodbadResults("venueActivityFeed"),{VENUE_ID:venue_id});
 
-// Test beerFeed
-untappd.beerFeed(goodbadResults("beerFeed"),beer_id);
+// Test beerActivityFeed
+untappd.beerActivityFeed(goodbadResults("beerActivityFeed"),{BID:beer_id});
 
 // Test breweryFeed
-untappd.venueFeed(goodbadResults("breweryFeed"),brewery_id);
-
-// Test checkinInfo
-untappd.checkinInfo(goodbadResults("checkinInfo"),checkin_id);
-
-// Test venueInfo
-untappd.venueInfo(goodbadResults("venueInfo"),venue_id);
-
-// Test beerInfo
-untappd.beerInfo(goodbadResults("beerInfo"),beer_id);
-
-// Test brewerInfo
-untappd.brewerInfo(goodbadResults("brewerInfo"),brewery_id);
+untappd.breweryActivityFeed(goodbadResults("breweryActivityFeed"),{BREWERY_ID:brewery_id});
 
 // Test userInfo
-untappd.userInfo(goodbadResults("userInfo"),sampleUser);
-
-// Test userBadges
-untappd.userBadges(goodbadResults("userBadges"),sampleUser);
-
-// Test userFriends
-untappd.userFriends(goodbadResults("userFriends"),sampleUser);
+untappd.userInfo(goodbadResults("userInfo"),{USERNAME: sampleUser});
 
 // Test userWishList
-untappd.userWishList(goodbadResults("userWishList"),sampleUser);
+untappd.userWishList(goodbadResults("userWishList"),{USERNAME: sampleUser});
+
+// Test userFriends
+untappd.userFriends(goodbadResults("userFriends"),{USERNAME: sampleUser});
+
+// Test userBadges
+untappd.userBadges(goodbadResults("userBadges"),{USERNAME: sampleUser});
 
 // Test userDistinctBeers
-untappd.userDistinctBeers(goodbadResults("userDistinctBeers"),sampleUser);
+untappd.userDistinctBeers(goodbadResults("userDistinctBeers"),{USERNAME: sampleUser});
 
-// Test Brewery Search
-untappd.searchBrewery(goodbadResults("searchBrewery"),"Stone");
+// Test brewerInfo
+untappd.breweryInfo(goodbadResults("brewerInfo"),{BREWERY_ID:brewery_id});
+
+// Test beerInfo
+untappd.beerInfo(goodbadResults("beerInfo"),{BID:beer_id});
+
+// Test venueInfo
+untappd.venueInfo(goodbadResults("venueInfo"),{VENUE_ID:venue_id});
 
 // Test Beer Search
-untappd.searchBeer(goodbadResults("searchBeer"),"Stout");
+untappd.beerSearch(goodbadResults("searchBeer"),{q:"Stout"});
 
-// Test Trending Beers
-untappd.trending(goodbadResults("trending"));
-
-// REQUIRES AUTH
-
-// Test friendFeed
-untappd.friendFeed(goodbadResults("friendFeed"));
-
-// Test pendingFriends
-untappd.pendingFriends(goodbadResults("pendingFriends"));
-
-// Test activityOnYou
-untappd.notifications(goodbadResults("activityOnYou"));
+// Test Brewery Search
+untappd.brewerySearch(goodbadResults("searchBrewery"),{q:"Stone"});
 
 // Test foursquareVenueLookup
-untappd.foursquareVenueLookup(goodbadResults("foursquareVenueLookup"),foursquare_id);
-
+untappd.foursquareVenueLookup(goodbadResults("foursquareVenueLookup"),{VENUE_ID:foursquare_id});
