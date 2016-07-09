@@ -65,7 +65,7 @@ var UntappdClient = function(debug) {
 		var options = {
 			host: "api.untappd.com",
 			port: 443,
-			path: path,
+			path: path + params,
 			method: method
 		};
 
@@ -77,17 +77,23 @@ var UntappdClient = function(debug) {
 			};
 		}
 
-		Object.keys(params).forEach(function(k) {
-			if (params[k]===undefined || params[k]===null) delete params[k];
-		});
+		log.debug('>>> method: ' + method + ' | path: ' + path + ' | params: ' + params + ' | data: ' + data);
+
+		//Object.keys(params).forEach(function(k) {
+			//if (params[k]===undefined || params[k]===null) delete params[k];
+		//});
 
 		if (token) {
 			params.access_token = token;
+			log.debug('>>> token: ' + token);
 		} else {
 			if (id) params.client_id = id;
 			if (secret) params.client_secret = secret;
 		}
-		if (params) options.path += "?"+QS.stringify(params);
+		//if (params) options.path += "?"+QS.stringify(params);
+		options.path += '?limit=1&client_id=' + id + '&client_secret=' + secret;
+
+		log.debug('>>> options.path: ' + options.path);
 
 		if (debug) console.log("node-untappd: get : "+options.path);
 
