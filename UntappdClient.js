@@ -108,7 +108,12 @@ var UntappdClient = function(debug) {
 			response.on("end",function(incoming){
 				if (debug) console.log("node-untappd: end: ",incoming?incoming.length:0);
 				data += incoming?incoming:"";
-				var obj = JSON.parse(data);
+				try{
+					var obj = JSON.parse(data);
+				}catch(e){
+					callback.call(that, e)
+					return
+				}
 				callback.call(that,null,obj);
 			});
 			response.on("error",function(){
