@@ -26,7 +26,7 @@ untappd.setClientId(clientId);
 untappd.setClientSecret(clientSecret);
 
 // EXAMPLE - List last 25 recent checkins of the given user
-untappd.userFeed(function(err,obj){
+untappd.userActivityFeed(function(err,obj){
 	if (debug) console.log(err,obj);
 	if (obj && obj.response && obj.response.checkins && obj.response.checkins.items) {
 		var beers = obj.response.checkins.items.forEach(function(checkin){
