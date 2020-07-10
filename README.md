@@ -66,15 +66,17 @@ Set your credientials
 
 Executing API calls, for example:
 
- 	var lookupuser = "[ some user name ]";
-	untappd.userFeed(function(err,obj){
-		var beers = obj.results.forEach(function(checkin){
-			console.log("\n"+username,"drank",checkin.beer_name);
-			console.log("by",checkin.brewery_name);
-			if (checkin.venue_name) console.log("at",checkin.venue_name);
-			console.log("on",checkin.created_at);
+	var data = {};
+ 	data.USERNAME = "[ some user name ]";
+	untappd.userActivityFeed(function(err, obj) {
+		var beers = obj.results.forEach(function(checkin) {
+			console.log(username, "drank", checkin.beer_name);
+			console.log("by", checkin.brewery_name);
+			if (checkin.venue_name)
+				console.log("at", checkin.venue_name);
+			console.log("on", checkin.created_at);
 		});
-	},lookupuser);
+	}, data);
 
 ## API Calls
 
