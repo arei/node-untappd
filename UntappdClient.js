@@ -12,7 +12,7 @@ var Crypto = require("crypto");
 var UntappdClient = function(debug) {
 	var that = this;
 
-	var id,secret,token;
+	var id, secret, token;
 
 	var setClientId = function(clientId) {
 		id = clientId;
@@ -47,12 +47,12 @@ var UntappdClient = function(debug) {
 	};
 	that.getAccessToken = getAccessToken;
 
-	var post = function(path, params, data, callback){
-		return req("POST",path,params,data,callback);
+	var post = function(path, params, data, callback) {
+		return req("POST", path, params, data, callback);
 	};
 
-	var get = function(path, params, callback){
-		return req("GET",path,params,null,callback);
+	var get = function(path, params, callback) {
+		return req("GET", path, params, null, callback);
 	};
 
 	var req = function(method, path, params, data, callback) {
@@ -72,8 +72,8 @@ var UntappdClient = function(debug) {
 		if (method == "POST") {
 			data = QS.stringify(data);
 			options.headers = {
-				"Content-Type":"application/x-www-form-urlencoded",
-				"Content-Length":data.length
+				"Content-Type": "application/x-www-form-urlencoded",
+				"Content-Length": data.length
 			};
 		}
 
@@ -87,9 +87,9 @@ var UntappdClient = function(debug) {
 			if (id) params.client_id = id;
 			if (secret) params.client_secret = secret;
 		}
-		if (params) options.path += "?"+QS.stringify(params);
+		if (params) options.path += "?" + QS.stringify(params);
 
-		if (debug) console.log("node-untappd: get : "+options.path);
+		if (debug) console.log("node-untappd: get : " + options.path);
 
 		if (debug){
 			console.log("\nRequest");
@@ -98,29 +98,35 @@ var UntappdClient = function(debug) {
 			console.log(data);
 		}
 
-		var request = HTTPS.request(options,function(response){
+		var request = HTTPS.request(options, function(response) {
 			response.setEncoding("utf8");
 			var data = "";
-			response.on("data",function(incoming){
-				if (debug) console.log("node-untappd: data: ",incoming.length);
+
+      response.on("data", function(incoming) {
+				if (debug) console.log("node-untappd: data: ", incoming.length);
 				data += incoming;
 			});
+
 			response.on("end",function(incoming){
 				if (debug) console.log("node-untappd: end: ",incoming?incoming.length:0);
 				data += incoming?incoming:"";
-				var obj = JSON.parse(data);
-				callback.call(that,null,obj);
-			});
-			response.on("error",function(){
-				if (debug) console.log("node-untappd: error: ",arguments);
-				callback.call(that,arguments,null);
+				try{
+					var obj = JSON.parse(data);
+ 				  callback.call(that,null,obj);
+				}catch(e){
+					callback.call(that, e)
+				}
+			
+        response.on("error", function() {
+				if (debug) console.log("node-untappd: error: ", arguments);
+				callback.call(that, arguments, null);
 			});
 		});
-		request.on("error",function(){
-			if (debug) console.log("node-untappd: error: ",arguments);
-			callback.call(that,arguments,null);
+		request.on("error", function() {
+			if (debug) console.log("node-untappd: error: ", arguments);
+			callback.call(that, arguments, null);
 		});
-		if(method=="POST"){
+		if(method=="POST") {
 			request.write(data);
 		}
 		request.end();
@@ -167,14 +173,14 @@ var UntappdClient = function(debug) {
 	};
 
 	//this is for server-side, Step 1 - OAUTH Authentication
-	that.getAuthenticationURL = function(returnRedirectionURL){
+	that.getAuthenticationURL = function(returnRedirectionURL) {
 		validate(returnRedirectionURL, "returnRedirectionURL");
 		if (!hasId()) throw new Error("UntappdClient.getUserAuthenticationURL requires a ClientId");
 		return "https://untappd.com/oauth/authenticate/?client_id="+id+"&response_type=code&redirect_url="+returnRedirectionURL+"&code=COD";
 	};
 
 	// Step 2 - OATUH Authorization
-	that.getAuthorizationURL = function(returnRedirectionURL,code){
+	that.getAuthorizationURL = function(returnRedirectionURL,code) {
 		validate(returnRedirectionURL, "returnRedirectionURL");
 		if (!hasId() || !hasSecret()) throw new Error("UntappdClient.getUserAuthenticationURL requires a ClientId/ClientSecret pair.");
 		return "https://untappd.com/oauth/authorize/?client_id="+id+"&client_secret="+secret+"&response_type=code&redirect_url="+returnRedirectionURL+"&code="+code;
@@ -344,7 +350,7 @@ var UntappdClient = function(debug) {
 		validate(data.bid, "bid");
 		validate(callback, "callback");
 		authorized(true);
-		return post("/v4/checkin/add",{} , data, callback);
+		return post("/v4/checkin/add", {} , data, callback);
 	};
 
 	// https://untappd.com/api/docs#toast

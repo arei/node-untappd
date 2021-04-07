@@ -1,10 +1,10 @@
 node-untappd
 -------
-NodeJS API to intergrate with [Untappd API](http://untappd.com/api/docs/v3).
+NodeJS API to intergrate with [Untappd API](http://untappd.com/api/docs).
 
-[Untappd](http://untappd.com) is a social beer tracking application for most mobile devices and the greater internet at large.  It supports a robust set of features for "checking into" beer as it is consumed including locations, ratings, comments, and social integration.
+[Untappd](http://untappd.com) is a social beer tracking application for most mobile devices and the greater internet at large. It supports a robust set of features for "checking into" beer as it is consumed including locations, ratings, comments, and social integration.
 
-This library provides NodeJS with an abstraction to the [Untappd API](http://untappd.com/api/docs/v3) allowing developers to query and integrate Untappd services into their own applications.
+This library provides NodeJS with an abstraction to the [Untappd API](http://untappd.com/api/docs) allowing developers to query and integrate Untappd services into their own applications.
 
 This library nor the authors have any formal relationship with Untappd other than the beer we drink.
 
@@ -16,9 +16,9 @@ This library nor the authors have any formal relationship with Untappd other tha
 
  1. If you have never done so, sign up for [Untappd](http://untappd.com) and download it to your favorite mobile device.
  2. Have a nice craft beer and make sure to Checkin.
- 3. You need to get yourself an Untappd ClientID and ClientSecret.  To do so, go complete the [Untappd API Key Form](http://untappd.com/api/register?register=new).
+ 3. You need to get yourself an Untappd ClientID and ClientSecret. To do so, go complete the [Untappd API Key Form](http://untappd.com/api/register?register=new).
  4. Have more nice craft beer, make more checkins.
- 5. Wait for Untappd to email you your key.  This takes around two (2) business days.
+ 5. Wait for Untappd to email you your key. This takes around two (2) business days.
  6. Download node-untappd: `npm install node-untappd`
  7. Look at the Example, beer is optional but encouraged.
 
@@ -26,7 +26,7 @@ This library nor the authors have any formal relationship with Untappd other tha
 
 Untappd now support OAUTH for most operations and specifically for any operation that writes data to untappd.
 
-To get an Access Token, you can use our handy OAUTH URL call to get the untappd oauth url, and then use that to get the access token.  For more information on getting access tokens, please refer to [Untappd's API Authentication page](http://untappd.com/api/docs/v4#authentication).
+To get an Access Token, you can use our handy OAUTH URL call to get the untappd oauth url, and then use that to get the access token. For more information on getting access tokens, please refer to [Untappd's API Authentication page](http://untappd.com/api/docs/v4#authentication).
 
 ## The Example code
 
@@ -66,36 +66,32 @@ Set your credientials
 
 Executing API calls, for example:
 
- 	var lookupuser = "[ some user name ]";
-	untappd.userActivityFeed(function(err,obj){
-		var beers = obj.results.forEach(function(checkin){
-			console.log("\n"+username,"drank",checkin.beer_name);
-			console.log("by",checkin.brewery_name);
-			if (checkin.venue_name) console.log("at",checkin.venue_name);
-			console.log("on",checkin.created_at);
+	var data = {};
+ 	data.USERNAME = "[ some user name ]";
+	untappd.userActivityFeed(function(err, obj) {
+		var beers = obj.results.forEach(function(checkin) {
+			console.log(username, "drank", checkin.beer_name);
+			console.log("by", checkin.brewery_name);
+			if (checkin.venue_name)
+				console.log("at", checkin.venue_name);
+			console.log("on", checkin.created_at);
 		});
-	},lookupuser);
+	}, data);
 
 ## API Calls
 
-All of the API calls defined in the [Untappd API](http://untappd.com/api/docs/v3) have been implemented into the UntappdClient.  It's a long list, so please look at UntappdClient for usage.
+All of the API calls defined in the [Untappd API](http://untappd.com/api/docs) have been implemented into the UntappdClient.  It's a long list, so please look at UntappdClient for usage.
 
-Each API call takes a callback function as its first argument.  Upon a result this function is called with `err` as the first parameter and `obj`, an object of the results, as the second.
+Each API call takes a callback function as its first argument. Upon a result this function is called with `err` as the first parameter and `obj`, an object of the results, as the second.
 
 	function(err,obj)
 
 The `err` is only populated if an error occurs, otherwise it is null.
 
-The `obj` will be populated with the object returned from Untappd upon completion of the call.  In some cases where an error occurs, both `err` and `obj` will be populated.
+The `obj` will be populated with the object returned from Untappd upon completion of the call. In some cases where an error occurs, both `err` and `obj` will be populated.
 
 ## Going beyond the API
 
-We are providing only the most basic API.  Please use it and take it to strange and wonderful new places.  Also, please share what you have done with us, any suggestions you have with us, and by all means any bugs you find with us.  We are eager to hear from you and, more importantly, score free beer from you.
+We are providing only the most basic API. Please use it and take it to strange and wonderful new places. Also, please share what you have done with us, any suggestions you have with us, and by all means any bugs you find with us. We are eager to hear from you and, more importantly, score free beer from you.
 
-## Examples of Usage
-
-Below is a list of sites where you can see node-untappd in production use.
-
- * http://www.arei.net - arei's website which shows the last beer he drank in the upper right corner.
-
-If you are using node-untappd somewhere in production, I'd love to share it out.  Please let me know!
+If you are using node-untappd somewhere in production, I'd love to share it out. Please let me know!
