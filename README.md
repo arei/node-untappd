@@ -1,10 +1,10 @@
 node-untappd
 -------
-NodeJS API to intergrate with [Untappd API](http://untappd.com/api/docs/v3).
+NodeJS API to intergrate with [Untappd API](http://untappd.com/api/docs).
 
 [Untappd](http://untappd.com) is a social beer tracking application for most mobile devices and the greater internet at large. It supports a robust set of features for "checking into" beer as it is consumed including locations, ratings, comments, and social integration.
 
-This library provides NodeJS with an abstraction to the [Untappd API](http://untappd.com/api/docs/v3) allowing developers to query and integrate Untappd services into their own applications.
+This library provides NodeJS with an abstraction to the [Untappd API](http://untappd.com/api/docs) allowing developers to query and integrate Untappd services into their own applications.
 
 This library nor the authors have any formal relationship with Untappd other than the beer we drink.
 
@@ -80,7 +80,7 @@ Executing API calls, for example:
 
 ## API Calls
 
-All of the API calls defined in the [Untappd API](http://untappd.com/api/docs/v3) have been implemented into the UntappdClient. It's a long list, so please look at UntappdClient for usage.
+All of the API calls defined in the [Untappd API](http://untappd.com/api/docs) have been implemented into the UntappdClient.  It's a long list, so please look at UntappdClient for usage.
 
 Each API call takes a callback function as its first argument. Upon a result this function is called with `err` as the first parameter and `obj`, an object of the results, as the second.
 
