@@ -364,7 +364,7 @@ var UntappdClient = function(debug) {
 	};
 
 	// https://untappd.com/api/docs#pendingfriends
-	that.pendingFriends = function(callback) {
+	that.pendingFriends = function(callback, data) {
 		data = data || {}
 		validate(callback, "callback");
 		authorized(true);
