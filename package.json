@@ -24,7 +24,7 @@
     "innebriated"
   ],
   "description": "NodeJS API to the Untappd Service",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "homepage": "http://github.com/arei/node-untappd",
   "bugs": {
     "url": "http://github.com/arei/node-untappd/issues"
