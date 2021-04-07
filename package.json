@@ -1,12 +1,33 @@
 {
   "author": "Glen R. Goodwin (http://www.arei.net)",
   "name": "node-untappd",
-  "keywords": [ "untappd","api","beer","node-untappd","untapped","brew","brewery","untapped","microbrew","micro-brew","micro brew","craft beer","yum","drunk","drunken","trashed","lindsey lohan","wasted","bombed","innebriated" ],
+  "keywords": [
+    "untappd",
+    "api",
+    "beer",
+    "node-untappd",
+    "untapped",
+    "brew",
+    "brewery",
+    "untapped",
+    "microbrew",
+    "micro-brew",
+    "micro brew",
+    "craft beer",
+    "yum",
+    "drunk",
+    "drunken",
+    "trashed",
+    "lindsey lohan",
+    "wasted",
+    "bombed",
+    "innebriated"
+  ],
   "description": "NodeJS API to the Untappd Service",
   "version": "0.5.0",
   "homepage": "http://github.com/arei/node-untappd",
   "bugs": {
-        "url": "http://github.com/arei/node-untappd/issues"
+    "url": "http://github.com/arei/node-untappd/issues"
   },
   "licenses": [
     {
@@ -14,6 +35,10 @@
       "url": "http://github.com/arei/node-untappd/blob/master/LICENSE.txt"
     }
   ],
+  "scripts" : {
+    "test" : "./node_modules/.bin/jest",
+    "test-debug": "node debug --harmony ./node_modules/jest-cli/bin/jest.js --runInBand"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/arei/node-untappd.git"
@@ -23,6 +48,10 @@
     "node": ">=0.6.11"
   },
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^19.0.2",
+    "jest-cli": "^19.0.2",
+    "sinon": "^2.1.0"
+  },
   "optionalDependencies": {}
 }

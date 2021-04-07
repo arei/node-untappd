@@ -101,17 +101,23 @@ var UntappdClient = function(debug) {
 		var request = HTTPS.request(options, function(response) {
 			response.setEncoding("utf8");
 			var data = "";
-			response.on("data", function(incoming) {
+
+      response.on("data", function(incoming) {
 				if (debug) console.log("node-untappd: data: ", incoming.length);
 				data += incoming;
 			});
-			response.on("end", function(incoming) {
-				if (debug) console.log("node-untappd: end: ", incoming ? incoming.length : 0);
-				data += incoming?incoming: "";
-				var obj = JSON.parse(data);
-				callback.call(that, null, obj);
-			});
-			response.on("error", function() {
+
+			response.on("end",function(incoming){
+				if (debug) console.log("node-untappd: end: ",incoming?incoming.length:0);
+				data += incoming?incoming:"";
+				try{
+					var obj = JSON.parse(data);
+ 				  callback.call(that,null,obj);
+				}catch(e){
+					callback.call(that, e)
+				}
+			
+        response.on("error", function() {
 				if (debug) console.log("node-untappd: error: ", arguments);
 				callback.call(that, arguments, null);
 			});
