@@ -18,20 +18,19 @@ var debug = false;
 var sampleUser = "arei";
 var beer_id = "1";
 var brewery_id = "1";
-var checkin_id = "1";
 var venue_id = "1";
 var foursquare_id = "4ccf5fec1ac7a1cd6a5c1392";
 
 // Handles testing our results
 var goodbadResults = function(name) {
-	return function(err,obj){
-		if (debug) console.log(name,err,obj);
+	return function(err, obj) {
+		if (debug) console.log(name, err, obj);
 		if (err || !obj || obj.meta.code>=400 || !obj.response) {
 			console.log("[ FAIL ] " + name);
 			console.error("\t" + obj.meta.error_detail);
 			return;
 		}
-		console.log("[ PASS ] "+name);
+		console.log("[ PASS ] " + name);
 	};
 };
 
@@ -49,19 +48,19 @@ console.log("[ INFO ] OAUTH Url: "+untappd.getUserAuthenticationURL("http://loca
 console.log("");
 
 // Test userActivityFeed
-untappd.userActivityFeed(goodbadResults("userActivityFeed"),{USERNAME:sampleUser});
+untappd.userActivityFeed(goodbadResults("userActivityFeed"),{USERNAME: sampleUser});
 
 // Test pubFeed
-untappd.pubFeed(goodbadResults("pubFeed"), {lat:40, lng:74});
+untappd.pubFeed(goodbadResults("pubFeed"), {lat: 40, lng: 74});
 
 // Test venueActivityFeed
 untappd.venueActivityFeed(goodbadResults("venueActivityFeed"),{VENUE_ID:venue_id});
 
 // Test beerActivityFeed
-untappd.beerActivityFeed(goodbadResults("beerActivityFeed"),{BID:beer_id});
+untappd.beerActivityFeed(goodbadResults("beerActivityFeed"),{BID: beer_id});
 
 // Test breweryFeed
-untappd.breweryActivityFeed(goodbadResults("breweryActivityFeed"),{BREWERY_ID:brewery_id});
+untappd.breweryActivityFeed(goodbadResults("breweryActivityFeed"),{BREWERY_ID: brewery_id});
 
 // Test userInfo
 untappd.userInfo(goodbadResults("userInfo"),{USERNAME: sampleUser});
@@ -79,13 +78,13 @@ untappd.userBadges(goodbadResults("userBadges"),{USERNAME: sampleUser});
 untappd.userDistinctBeers(goodbadResults("userDistinctBeers"),{USERNAME: sampleUser});
 
 // Test brewerInfo
-untappd.breweryInfo(goodbadResults("brewerInfo"),{BREWERY_ID:brewery_id});
+untappd.breweryInfo(goodbadResults("brewerInfo"),{BREWERY_ID: brewery_id});
 
 // Test beerInfo
-untappd.beerInfo(goodbadResults("beerInfo"),{BID:beer_id});
+untappd.beerInfo(goodbadResults("beerInfo"),{BID: beer_id});
 
 // Test venueInfo
-untappd.venueInfo(goodbadResults("venueInfo"),{VENUE_ID:venue_id});
+untappd.venueInfo(goodbadResults("venueInfo"),{VENUE_ID: venue_id});
 
 // Test Beer Search
 untappd.beerSearch(goodbadResults("searchBeer"),{q:"Stout"});
@@ -94,4 +93,4 @@ untappd.beerSearch(goodbadResults("searchBeer"),{q:"Stout"});
 untappd.brewerySearch(goodbadResults("searchBrewery"),{q:"Stone"});
 
 // Test foursquareVenueLookup
-untappd.foursquareVenueLookup(goodbadResults("foursquareVenueLookup"),{VENUE_ID:foursquare_id});
+untappd.foursquareVenueLookup(goodbadResults("foursquareVenueLookup"),{VENUE_ID: foursquare_id});
