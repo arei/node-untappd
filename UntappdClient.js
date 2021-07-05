@@ -102,7 +102,7 @@ var UntappdClient = function(debug) {
 			response.setEncoding("utf8");
 			var data = "";
 
-      response.on("data", function(incoming) {
+			response.on("data", function(incoming) {
 				if (debug) console.log("node-untappd: data: ", incoming.length);
 				data += incoming;
 			});
@@ -112,25 +112,26 @@ var UntappdClient = function(debug) {
 				data += incoming?incoming:"";
 				try{
 					var obj = JSON.parse(data);
- 				  callback.call(that,null,obj);
+					callback.call(that,null,obj);
 				}catch(e){
-					callback.call(that, e)
+					callback.call(that, e);
 				}
-			
-        response.on("error", function() {
+
+				response.on("error", function() {
+					if (debug) console.log("node-untappd: error: ", arguments);
+					callback.call(that, arguments, null);
+				});
+			});
+			request.on("error", function() {
 				if (debug) console.log("node-untappd: error: ", arguments);
 				callback.call(that, arguments, null);
 			});
+			if(method=="POST") {
+				request.write(data);
+			}
+			request.end();
+			return request;
 		});
-		request.on("error", function() {
-			if (debug) console.log("node-untappd: error: ", arguments);
-			callback.call(that, arguments, null);
-		});
-		if(method=="POST") {
-			request.write(data);
-		}
-		request.end();
-		return request;
 	};
 
 	var hasToken = function() {
@@ -190,7 +191,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#activityfeed
 	that.activityFeed = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(callback, "callback");
 		authorized(true);
 		return get("/v4/checkin/recent", data, callback);
@@ -198,7 +199,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#useractivityfeed
 	that.userActivityFeed = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(callback, "callback");
 		// username or token
 		if (!hasToken()) validate(data.USERNAME, "USERNAME");
@@ -208,7 +209,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#theppublocal
 	that.pubFeed = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(callback, "callback");
 		authorized();
 		return get("/v4/thepub/local", data, callback);
@@ -216,7 +217,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#venueactivityfeed
 	that.venueActivityFeed = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(callback, "callback");
 		validate(data.VENUE_ID, "VENUE_ID");
 		authorized();
@@ -225,7 +226,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#beeractivityfeed
 	that.beerActivityFeed = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(callback, "callback");
 		validate(data.BID, "BID");
 		authorized();
@@ -234,7 +235,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#breweryactivityfeed
 	that.breweryActivityFeed = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(callback, "callback");
 		validate(data.BREWERY_ID, "BREWERY_ID");
 		authorized();
@@ -243,7 +244,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#notifications
 	that.notifications = function(callback) {
-		data = data || {}
+		data = data || {};
 		validate(callback, "callback");
 		authorized(true);
 		return get("/v4/notifications", null, callback);
@@ -253,7 +254,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#userinfo
 	that.userInfo = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		if (!hasToken()) validate(data.USERNAME, "USERNAME");
 		validate(callback, "callback");
 		authorized();
@@ -262,7 +263,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#userwishlist
 	that.userWishList = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		if (!hasToken()) validate(data.USERNAME, "USERNAME");
 		validate(callback, "callback");
 		authorized();
@@ -271,7 +272,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#userfriends
 	that.userFriends = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		if (!hasToken()) validate(data.USERNAME, "USERNAME");
 		validate(callback, "callback");
 		authorized();
@@ -280,7 +281,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#userbadges
 	that.userBadges = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		if (!hasToken()) validate(data.USERNAME, "USERNAME");
 		validate(callback, "callback");
 		authorized();
@@ -289,7 +290,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#userbeers
 	that.userDistinctBeers = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		if (!hasToken()) validate(data.USERNAME, "USERNAME");
 		validate(callback, "callback");
 		authorized();
@@ -298,7 +299,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#breweryinfo
 	that.breweryInfo = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.BREWERY_ID, "BREWERY_ID");
 		validate(callback, "callback");
 		authorized();
@@ -307,7 +308,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#beerinfo
 	that.beerInfo = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.BID, "BID");
 		validate(callback, "callback");
 		authorized();
@@ -316,7 +317,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#venueinfo
 	that.venueInfo = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.VENUE_ID, "VENUE_ID");
 		validate(callback, "callback");
 		authorized();
@@ -325,7 +326,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#beersearch
 	that.beerSearch = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.q, "q");
 		validate(callback, "callback");
 		authorized();
@@ -334,7 +335,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#brewerysearch
 	that.brewerySearch = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.q, "searchTerms");
 		validate(callback, "callback");
 		authorized();
@@ -344,7 +345,7 @@ var UntappdClient = function(debug) {
 	// CHECKIN calls
 	// https://untappd.com/api/docs#checkin
 	that.checkin = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.gmt_offset, "gmt_offset");
 		validate(data.timezone, "timezone");
 		validate(data.bid, "bid");
@@ -356,7 +357,7 @@ var UntappdClient = function(debug) {
 	// https://untappd.com/api/docs#toast
 	// If already toasted, this will untoast, otherwise it toasts.
 	that.toast = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.CHECKIN_ID, "CHECKIN_ID");
 		validate(callback, "callback");
 		authorized(true);
@@ -365,7 +366,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#pendingfriends
 	that.pendingFriends = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(callback, "callback");
 		authorized(true);
 		return get("/v4/user/pending", data, callback);
@@ -373,7 +374,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#addfriend
 	that.requestFriends = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.TARGET_ID, "TARGET_ID");
 		validate(callback, "callback");
 		authorized(true);
@@ -382,7 +383,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#removefriend
 	that.removeFriends = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.TARGET_ID, "TARGET_ID");
 		validate(callback, "callback");
 		authorized(true);
@@ -391,7 +392,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#acceptfriend
 	that.acceptFriends = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.TARGET_ID, "TARGET_ID");
 		validate(callback, "callback");
 		authorized(true);
@@ -400,7 +401,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#rejectfriend
 	that.rejectFriends = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.TARGET_ID, "TARGET_ID");
 		validate(callback, "callback");
 		authorized(true);
@@ -409,7 +410,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#addcomment
 	that.addComment = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.CHECKIN_ID, "CHECKIN_ID");
 		validate(data.shout, "shout");
 		validate(callback, "callback");
@@ -419,7 +420,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#removecommment
 	that.removeComment = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.COMMENT_ID, "COMMENT_ID");
 		validate(callback, "callback");
 		authorized(true);
@@ -428,7 +429,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#addwish
 	that.addToWishList = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.bid, "bid");
 		validate(callback, "callback");
 		authorized(true);
@@ -437,7 +438,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#removewish
 	that.removeFromWishList = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.bid, "bid");
 		validate(callback, "callback");
 		authorized(true);
@@ -446,7 +447,7 @@ var UntappdClient = function(debug) {
 
 	// https://untappd.com/api/docs#foursquarelookup
 	that.foursquareVenueLookup = function(callback, data) {
-		data = data || {}
+		data = data || {};
 		validate(data.VENUE_ID, "VENUE_ID");
 		validate(callback, "callback");
 		authorized();
