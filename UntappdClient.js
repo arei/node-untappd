@@ -117,19 +117,24 @@ var UntappdClient = function(debug) {
 					callback.call(that, e);
 				}
 
-				response.on("error", function() {
-					if (debug) console.log("node-untappd: error: ", arguments);
-					callback.call(that, arguments, null);
-				});
 			});
+
+			response.on("error", function() {
+				if (debug) console.log("node-untappd: error: ", arguments);
+				callback.call(that, arguments, null);
+			});
+
 			request.on("error", function() {
 				if (debug) console.log("node-untappd: error: ", arguments);
 				callback.call(that, arguments, null);
 			});
+
 			if(method=="POST") {
 				request.write(data);
 			}
+
 			request.end();
+
 			return request;
 		});
 	};

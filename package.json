@@ -35,8 +35,8 @@
       "url": "http://github.com/arei/node-untappd/blob/master/LICENSE.txt"
     }
   ],
-  "scripts" : {
-    "test" : "./node_modules/.bin/jest",
+  "scripts": {
+    "test": "./node_modules/.bin/jest",
     "test-debug": "node debug --harmony ./node_modules/jest-cli/bin/jest.js --runInBand"
   },
   "repository": {
