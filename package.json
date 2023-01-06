@@ -49,8 +49,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "jest": "^19.0.2",
-    "jest-cli": "^19.0.2",
+    "jest": "^29.3.1",
+    "jest-cli": "^29.3.1",
     "sinon": "^2.1.0"
   },
   "optionalDependencies": {}
